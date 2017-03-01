@@ -1,9 +1,24 @@
 # ByPropertyPath.js
 
-Manage javascript objects by a property path string.
+*Manage javascript objects by a property path string.*
+
+What is a property path?
+If you jave a object like this: 
+```javascript
+var obj = {
+	propertyONE : {
+		propertyTWO : null,
+	}
+};
+```
+Then the property path for the property `propertyTWO` of this object would be `"propertyONE.propertyTWO"`.
+
+---
 
 ## Browser support:
 IE8+
+
+---
 
 ## Usage & Documentation:
 All examples are done with this object:
