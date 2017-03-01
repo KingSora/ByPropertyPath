@@ -13,7 +13,7 @@ var obj = {
 	}
 };
 ```
-Then the property path for the property **`propertyTWO`** of this object would be **`"propertyONE.propertyTWO"`**.
+Then the property path for the property **`propertyTWO`** would be **`"propertyONE.propertyTWO"`**.
 
 
 ## Browser support:
