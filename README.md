@@ -2,6 +2,9 @@
 
 Manage javascript objects by a property path string.
 
+## Browser support:
+IE8+
+
 ## Usage & Documentation:
 All examples are done with this object:
 
