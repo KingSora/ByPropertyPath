@@ -111,5 +111,9 @@ console.log(obj.drinks.water);
 > "classic"
 ```
 
+## Thanks to:
+Using his extend method to build the new object in my extend method: 
+https://github.com/justmoon/node-extend
+
 ## License:
 MIT
