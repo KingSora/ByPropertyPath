@@ -1,6 +1,6 @@
 # ByPropertyPath.js
 
-Manage javascript objects by a property path.
+Manage javascript objects by a property path string.
 
 ## Usage & Documentation:
 All examples are done with this object:
