@@ -15,12 +15,10 @@ var obj = {
 ```
 Then the property path for the property **`propertyTWO`** of this object would be **`"propertyONE.propertyTWO"`**.
 
----
 
 ## Browser support:
 IE8+
 
----
 
 ## Usage & Documentation:
 All examples are done with this object:
