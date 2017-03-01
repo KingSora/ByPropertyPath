@@ -1,7 +1,7 @@
 # ByPropertyPath.js
 
-*Manage javascript objects by a property path string.*
-
+**Manage javascript objects by a property path string.**
+---
 What is a property path?
 If you jave a object like this: 
 ```javascript
