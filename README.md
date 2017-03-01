@@ -4,7 +4,7 @@
 
 ---
 
-What is a property path?
+What is a **property path**?
 If you jave a object like this: 
 ```javascript
 var obj = {
@@ -13,7 +13,7 @@ var obj = {
 	}
 };
 ```
-Then the property path for the property `propertyTWO` of this object would be `"propertyONE.propertyTWO"`.
+Then the property path for the property **`propertyTWO`** of this object would be **`"propertyONE.propertyTWO"`**.
 
 ---
 
