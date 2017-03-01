@@ -143,7 +143,7 @@
          * Gets the value of the property which is represented by the property path.
          * @param object {object} The object to which the property path shall be applied.
          * @param propertyPath {string} The property path which leads to the property which shall be get.
-         * @returns {object} The property value of the property to which the given property path led. Undefined if the property path led to a non existent property.
+         * @returns {object|undefined} The property value of the property to which the given property path led. Undefined if the property path led to a non existent property.
          */
         _base.get = function(object, propertyPath) {
             var result;
@@ -174,7 +174,7 @@
          * Deletes the property which is represented by the property path.
          * @param object {object} The object to which the property path shall be applied.
          * @param propertyPath {string} The property path which leads to the property which shall be deleted.
-         * @param deleteParentObjectIfEmpty {boolean} True if the parent object of the property which shall be deleted, shall be deleted too if it is empty after the deletion of the property, false otherwise.
+         * @param deleteParentObjectIfEmpty {boolean} True if the parent object of the property which shall be deleted, shall be deleted too if it is empty after the deletion of the property.
          * @returns {boolean} True if the property to which the property path shall lead, was found and deleted, false otherwise.
          */
         _base.del = function(object, propertyPath, deleteParentObjectIfEmpty) {
