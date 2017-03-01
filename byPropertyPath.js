@@ -1,0 +1,232 @@
+/*!
+ * ByPropertyPath.js v1.0
+ * https://github.com/KingSora/ByPropertyPath
+ *
+ * Includes node-extend.js
+ * https://github.com/justmoon/node-extend
+ *
+ * Copyright King Sora.
+ * https://github.com/KingSora
+ *
+ * Released under the MIT license
+ * Date: 01.03.2017
+ */
+(function(wnd) {
+    var byPropertyPath = function() {
+        var _base = this;
+        var hasOwnProperty = Object.prototype.hasOwnProperty;
+        var toStr = Object.prototype.toString;
+
+        //==START https://github.com/justmoon/node-extend
+
+        var isArray = function isArray(arr) {
+            if (typeof Array.isArray === 'function') {
+                return Array.isArray(arr);
+            }
+
+            return toStr.call(arr) === '[object Array]';
+        };
+
+        var isPlainObject = function (obj) {
+            if (!obj || toStr.call(obj) !== '[object Object]') {
+                return false;
+            }
+
+            var hasOwnConstructor = hasOwnProperty.call(obj, 'constructor');
+            var hasIsPrototypeOf = obj.constructor && obj.constructor.prototype && hasOwnProperty.call(obj.constructor.prototype, 'isPrototypeOf');
+
+            if (obj.constructor && !hasOwnConstructor && !hasIsPrototypeOf) {
+                return false;
+            }
+
+            var key;
+            for (key in obj) { /**/ }
+
+            return typeof key === 'undefined' || hasOwnProperty.call(obj, key);
+        };
+
+        var extend = function() {
+            var options, name, src, copy, copyIsArray, clone;
+            var target = arguments[0];
+            var i = 1;
+            var length = arguments.length;
+            var deep = false;
+
+            // Handle a deep copy situation
+            if (typeof target === 'boolean') {
+                deep = target;
+                target = arguments[1] || {};
+                // skip the boolean and the target
+                i = 2;
+            } else if ((typeof target !== 'object' && typeof target !== 'function') || target == null) {
+                target = {};
+            }
+
+            for (; i < length; ++i) {
+                options = arguments[i];
+                // Only deal with non-null/undefined values
+                if (options != null) {
+                    // Extend the base object
+                    for (name in options) {
+                        src = target[name];
+                        copy = options[name];
+
+                        // Prevent never-ending loop
+                        if (target !== copy) {
+                            // Recurse if we're merging plain objects or arrays
+                            if (deep && copy && (isPlainObject(copy) || (copyIsArray = isArray(copy)))) {
+                                if (copyIsArray) {
+                                    copyIsArray = false;
+                                    clone = src && isArray(src) ? src : [];
+                                } else {
+                                    clone = src && isPlainObject(src) ? src : {};
+                                }
+
+                                // Never move original objects, clone them
+                                target[name] = extend(deep, clone, copy);
+
+                                // Don't bring in undefined values
+                            } else if (typeof copy !== 'undefined') {
+                                target[name] = copy;
+                            }
+                        }
+                    }
+                }
+            }
+
+            // Return the modified object
+            return target;
+        };
+
+        //==END https://github.com/justmoon/node-extend
+
+        var isEmptyObject = function(obj) {
+            if (obj == null)
+                return true;
+            if (obj.length > 0)
+                return false;
+            if (obj.length === 0)
+                return true;
+            if (typeof obj !== "object")
+                return false;
+            for (var key in obj) {
+                if (hasOwnProperty.call(obj, key))
+                    return false;
+            }
+            return true;
+        };
+
+        var getPropertyByStringInternal = function(object, propertyString, propertyStringProgress, callbackOnProperty, callbackOnParentObject) {
+            var strFunc = 'function';
+            propertyStringProgress = propertyStringProgress === undefined ? "" : propertyStringProgress;
+
+            if(typeof propertyString !== 'string')
+                return;
+            if(propertyString.length === 0)
+                return;
+
+            for(var prop in object) {
+                var isSearchedProperty = (propertyStringProgress + prop) === propertyString;
+                if($.type(object[prop]) ===  'object' && !isSearchedProperty) {
+                    getPropertyByStringInternal(object[prop], propertyString, propertyStringProgress + prop + ".", callbackOnProperty, callbackOnParentObject);
+                    if(typeof callbackOnParentObject === strFunc)
+                        callbackOnParentObject(object, prop);
+                }
+                else if(isSearchedProperty) {
+                    if(typeof callbackOnProperty === strFunc)
+                        callbackOnProperty(object, prop);
+                }
+            }
+        };
+
+        /**
+         * Gets the value of the property which is represented by the property path.
+         * @param object {object} The object to which the property path shall be applied.
+         * @param propertyPath {string} The property path which leads to the property which shall be get.
+         * @returns {object} The property value of the property to which the given property path led. Undefined if the property path led to a non existent property.
+         */
+        _base.get = function(object, propertyPath) {
+            var result;
+            getPropertyByStringInternal(object, propertyPath, "", function(obj, prop) {
+                result = obj[prop];
+            });
+            return result;
+        };
+
+        /**
+         * Changes the value of the property which is represented by the property path.
+         * If the property to which the property path leads does not exist, then nothing happens.
+         * @param object {object} The object to which the property path shall be applied.
+         * @param propertyPath {string} The property path which leads to the property which shall be set.
+         * @param propertyValue {object} The value of the property to which the property path leads.
+         * @returns {boolean} True if the property was found and the value was successfully changed, false otherwise.
+         */
+        _base.set = function(object, propertyPath, propertyValue) {
+            var result = false;
+            getPropertyByStringInternal(object, propertyPath, "", function(obj, prop) {
+                obj[prop] = propertyValue;
+                result = true;
+            });
+            return result;
+        };
+
+        /**
+         * Deletes the property which is represented by the property path.
+         * @param object {object} The object to which the property path shall be applied.
+         * @param propertyPath {string} The property path which leads to the property which shall be deleted.
+         * @param deleteParentObjectIfEmpty {boolean} True if the parent object of the property which shall be deleted, shall be deleted too if it is empty after the deletion of the property, false otherwise.
+         * @returns {boolean} True if the property to which the property path shall lead, was found and deleted, false otherwise.
+         */
+        _base.del = function(object, propertyPath, deleteParentObjectIfEmpty) {
+            var result = false;
+            getPropertyByStringInternal(object, propertyPath, "", function(obj, prop) {
+                delete obj[prop];
+                result = true;
+            }, function (obj, prop) {
+                if(deleteParentObjectIfEmpty) {
+                    if (isEmptyObject(obj[prop])) {
+                        delete obj[prop];
+                    }
+                }
+            });
+            return result;
+        };
+
+        /**
+         * Extends the given object by the property which is represented by the property path and returns the extended object.
+         * If the property which is represented by the property path already exists, then the value will be changed to the given value.
+         * @param object {object} The object which shall be extended by the given property path.
+         * @param propertyPath {string} The property path which represents the extension.
+         * @param propertyValue {object} The value of the property to which the property path leads.
+         * @returns {object} The extended object.
+         */
+        _base.ext = function(object, propertyPath, propertyValue) {
+            var result;
+
+            var v;
+            var objects = [ ];
+            var propertyStingSplit = propertyPath.split('.');
+
+            for (v = 0; v < propertyStingSplit.length; v++) {
+                objects[v] = {};
+                objects[v][propertyStingSplit[v]] = {};
+            }
+            for (v = 0; v < objects.length; v++) {
+                var set = false;
+                var currObj = objects[v];
+                if (v + 1 === objects.length)
+                    set = true;
+
+                for (var property in currObj) {
+                    currObj[property] = objects[v + 1];
+                    if (set) {
+                        currObj[property] = propertyValue;
+                    }
+                }
+            }
+            return extend(true, { }, object, objects[0]);
+        };
+    };
+
+    wnd.ByPropertyPath = new byPropertyPath();
+})(window);
