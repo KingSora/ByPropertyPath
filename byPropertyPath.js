@@ -9,7 +9,7 @@
  * https://github.com/KingSora
  *
  * Released under the MIT license
- * Date: 01.03.2017
+ * Date: 18.03.2017
  */
 (function(wnd) {
     var byPropertyPath = function() {
