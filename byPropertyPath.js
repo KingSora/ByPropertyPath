@@ -100,6 +100,10 @@
 
         //==END https://github.com/justmoon/node-extend
 
+		var isObject = function(obj) {
+			return obj !== undefined && typeof obj === 'object' && obj !== null && !isArray(obj);
+		};
+		
         var isEmptyObject = function(obj) {
             if (obj == null)
                 return true;
@@ -118,27 +122,59 @@
 
         var getPropertyByStringInternal = function(object, propertyString, propertyStringProgress, callbackOnProperty, callbackOnParentObject) {
             var strFunc = 'function';
+            var found = false;
             propertyStringProgress = propertyStringProgress === undefined ? "" : propertyStringProgress;
 
             if(typeof propertyString !== 'string')
-                return;
+                return found;
             if(propertyString.length === 0)
-                return;
+                return found;
+
+            if (propertyStringProgress === "") {
+                var nameSplit = propertyString.split('.');
+                var currObj = object;
+                var nameProgression = "";
+                var pathIsInvalid = false;
+
+                for (var i = 0; i < nameSplit.length; i++) {
+                    var currSplit = nameSplit[i];
+                    currObj = currObj[currSplit];
+                    nameProgression += currSplit + ".";
+                    if (!isObject(currObj) && i + 1 !== nameSplit.length) {
+                        pathIsInvalid = true;
+                        break;
+                    }
+                }
+                if(pathIsInvalid)
+                    return nameProgression.slice(0, -1);
+            }
 
             for(var prop in object) {
                 var isSearchedProperty = (propertyStringProgress + prop) === propertyString;
-                if($.type(object[prop]) ===  'object' && !isSearchedProperty) {
-                    getPropertyByStringInternal(object[prop], propertyString, propertyStringProgress + prop + ".", callbackOnProperty, callbackOnParentObject);
+                if(isObject(object[prop]) && !isSearchedProperty) {
+                    found = getPropertyByStringInternal(object[prop], propertyString, propertyStringProgress + prop + ".", callbackOnProperty, callbackOnParentObject);
                     if(typeof callbackOnParentObject === strFunc)
                         callbackOnParentObject(object, prop);
                 }
                 else if(isSearchedProperty) {
                     if(typeof callbackOnProperty === strFunc)
                         callbackOnProperty(object, prop);
+                    found = true;
                 }
             }
+            return found;
         };
 
+		/**
+         * Indicates whether the given object has the given property path.
+         * @param object {object} The object to which the property path shall be applied.
+         * @param propertyPath {string} The property path which shall be checked.
+         * @returns {boolean|String} True if the property path was found. False if the property path was not found. If a String is returned, the string represents the property path until where it could be solved.
+         */
+        _base.has = function(object, propertyPath) {
+            return getPropertyByStringInternal(object, propertyPath);
+        };
+		
         /**
          * Gets the value of the property which is represented by the property path.
          * @param object {object} The object to which the property path shall be applied.
