@@ -64,7 +64,7 @@ ByPropertyPath.has(obj, "sweets.loli");
 //with incorrect and not resolvable property path
 
 ByPropertyPath.has(obj, "food.bruger.cheesburger");
-> "food.bruger" //because food exists and is a object, burger exists too but isn't a object, thats why the "cheesburger" property cant be accessed and the path cant even be resolved until the end.
+> "food.burger" //because food exists and is a object, burger exists too but isn't a object, thats why the "cheesburger" property cant be accessed and the path cant even be resolved until the end.
 ```
 
 #### Get Value:
