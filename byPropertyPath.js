@@ -23,7 +23,6 @@
             if (typeof Array.isArray === 'function') {
                 return Array.isArray(arr);
             }
-
             return toStr.call(arr) === '[object Array]';
         };
 
