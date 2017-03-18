@@ -1,5 +1,5 @@
 /*!
- * ByPropertyPath.js v1.0
+ * ByPropertyPath.js v1.1
  * https://github.com/KingSora/ByPropertyPath
  *
  * Includes node-extend.js
