@@ -44,9 +44,9 @@ var obj = {
  * Indicates whether the given object has the given property path.
  * @param object {object} The object to which the property path shall be applied.
  * @param propertyPath {string} The property path which shall be checked.
- * @returns {boolean|String} True if the property path was found. False if the property path was not found. If a String is returned, the string represents the property path until where it could be solved.
+ * @returns {boolean|string} True if the property path was found. False if the property path was not found. If a String is returned, the string represents the property path until where it could be solved.
  */
-ByPropertyPath.has = function(object, propertyPath) {
+ByPropertyPath.has = function(object, propertyPath);
 ```
 ```javascript
 //with correct property path
