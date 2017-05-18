@@ -95,7 +95,7 @@ ByPropertyPath.get(obj, "food.sandwich");
  * @param object {object} The object to which the property path shall be applied.
  * @param propertyPath {string} The property path which leads to the property which shall be set.
  * @param propertyValue {object} The value of the property to which the property path leads.
- * @param create {boolean} Indicates whether the property shall be created if it is not existent. With this parameter set to true the return value will be also always true.
+ * @param create {boolean} Indicates whether the property shall be created if it is not existent. With this parameter set to true the return value will be always true.
  * @returns {boolean} True if the property was found and the value was successfully changed, false otherwise.
  */
 ByPropertyPath.set = function(object, propertyPath, propertyValue, create);
