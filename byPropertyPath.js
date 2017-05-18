@@ -1,5 +1,5 @@
 /*!
- * ByPropertyPath.js v1.1
+ * ByPropertyPath.js v1.2
  * https://github.com/KingSora/ByPropertyPath
  *
  * Includes node-extend.js
@@ -9,7 +9,7 @@
  * https://github.com/KingSora
  *
  * Released under the MIT license
- * Date: 18.03.2017
+ * Date: 18.05.2017
  */
 (function(wnd) {
     var byPropertyPath = function() {
@@ -99,9 +99,9 @@
 
         //==END https://github.com/justmoon/node-extend
 
-		var isObject = function(obj) {
-			return obj !== undefined && typeof obj === 'object' && obj !== null && !isArray(obj);
-		};
+	var isObject = function(obj) {
+		return obj !== undefined && typeof obj === 'object' && obj !== null && !isArray(obj);
+	};
 		
         var isEmptyObject = function(obj) {
             if (obj == null)
@@ -164,7 +164,7 @@
             return found;
         };
 
-		/**
+	/**
          * Indicates whether the given object has the given property path.
          * @param object {object} The object to which the property path shall be applied.
          * @param propertyPath {string} The property path which shall be checked.
@@ -194,14 +194,26 @@
          * @param object {object} The object to which the property path shall be applied.
          * @param propertyPath {string} The property path which leads to the property which shall be set.
          * @param propertyValue {object} The value of the property to which the property path leads.
+         * @param create {boolean} Indicates whether the property shall be created if it is not existent. With this parameter set to true the return value will be also always true.
          * @returns {boolean} True if the property was found and the value was successfully changed, false otherwise.
          */
-        _base.set = function(object, propertyPath, propertyValue) {
+        _base.set = function(object, propertyPath, propertyValue, create) {
             var result = false;
             getPropertyByStringInternal(object, propertyPath, "", function(obj, prop) {
                 obj[prop] = propertyValue;
                 result = true;
             });
+            if(!result && create) {
+                var propertyPathSplits = propertyPath.split('.');
+                var obj = { };
+                var tmp = obj;
+                for(var i = 0; i < propertyPathSplits.length; i++) {
+                    var value = i === propertyPathSplits.length - 1 ? propertyValue : { };
+                    tmp = tmp[propertyPathSplits[i]] = value;
+                }
+                extend(true, object, obj);
+                result = true;
+            }
             return result;
         };
 
