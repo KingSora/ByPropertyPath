@@ -110,7 +110,7 @@ console.log(obj.drinks.water);
 ByPropertyPath.set(obj, "drinks.coffee" , "eww");
 > false
 
-//with incorrect property path but the created paramter set to true
+//with incorrect property path but the "create" paramter set to true
 ByPropertyPath.set(obj, "drinks.coffee" , "eww", true);
 > true
 console.log(obj.drinks.coffee);
