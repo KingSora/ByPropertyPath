@@ -149,17 +149,19 @@
             }
 
             for(var prop in object) {
-                var isSearchedProperty = (propertyStringProgress + prop) === propertyString;
-                if(isObject(object[prop]) && !isSearchedProperty) {
-                    found = getPropertyByStringInternal(object[prop], propertyString, propertyStringProgress + prop + ".", callbackOnProperty, callbackOnParentObject);
-                    if(typeof callbackOnParentObject === strFunc)
-                        callbackOnParentObject(object, prop);
-                }
-                else if(isSearchedProperty) {
-                    if(typeof callbackOnProperty === strFunc)
-                        callbackOnProperty(object, prop);
-                    found = true;
-                }
+				if(object.hasOwnProperty(prop)) {
+					var isSearchedProperty = (propertyStringProgress + prop) === propertyString;
+					if(isObject(object[prop]) && !isSearchedProperty) {
+						found = getPropertyByStringInternal(object[prop], propertyString, propertyStringProgress + prop + ".", callbackOnProperty, callbackOnParentObject);
+						if(typeof callbackOnParentObject === strFunc)
+							callbackOnParentObject(object, prop);
+					}
+					else if(isSearchedProperty) {
+						if(typeof callbackOnProperty === strFunc)
+							callbackOnProperty(object, prop);
+						found = true;
+					}
+				}
             }
             return found;
         };
@@ -194,7 +196,7 @@
          * @param object {object} The object to which the property path shall be applied.
          * @param propertyPath {string} The property path which leads to the property which shall be set.
          * @param propertyValue {object} The value of the property to which the property path leads.
-         * @param create {boolean} Indicates whether the property shall be created if it is not existent. With this parameter set to true the return value will be also always true.
+         * @param create {boolean} Indicates whether the property shall be created if it is not existent. With this parameter set to true the return value will be always true.
          * @returns {boolean} True if the property was found and the value was successfully changed, false otherwise.
          */
         _base.set = function(object, propertyPath, propertyValue, create) {
