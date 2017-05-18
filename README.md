@@ -63,7 +63,7 @@ ByPropertyPath.has(obj, "sweets.loli");
 
 //with incorrect and not resolvable property path
 
-ByPropertyPath.has(obj, "food.bruger.cheesburger");
+ByPropertyPath.has(obj, "food.burger.cheesburger");
 > "food.burger" //because food exists and is a object, burger exists too but isn't a object, thats why the "cheesburger" property cant be accessed and the path cant even be resolved until the end.
 ```
 
@@ -98,6 +98,18 @@ ByPropertyPath.get(obj, "food.sandwich");
  * @returns {boolean} True if the property was found and the value was successfully changed, false otherwise.
  */
 ByPropertyPath.set = function(object, propertyPath, propertyValue);
+
+
+/**
+ * Changes the value of the property which is represented by the property path.
+ * If the property to which the property path leads does not exist, then nothing happens.
+ * @param object {object} The object to which the property path shall be applied.
+ * @param propertyPath {string} The property path which leads to the property which shall be set.
+ * @param propertyValue {object} The value of the property to which the property path leads.
+ * @param create {boolean} Indicates whether the property shall be created if it is not existent. With this parameter set to true the return value will be also always true.
+ * @returns {boolean} True if the property was found and the value was successfully changed, false otherwise.
+ */
+ByPropertyPath.set = function(object, propertyPath, propertyValue, create);
 ```
 ```javascript
 //with correct property path
@@ -109,6 +121,12 @@ console.log(obj.drinks.water);
 //with incorrect property path
 ByPropertyPath.set(obj, "drinks.coffee" , "eww");
 > false
+
+//with incorrect property path but the created paramter set to true
+ByPropertyPath.set(obj, "drinks.coffee" , "eww", true);
+> true
+console.log(obj.drinks.coffee);
+> "eww"
 ```
 
 #### Delete Property:
